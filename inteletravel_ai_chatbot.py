@@ -1,28 +1,8 @@
-from flask import Flask, request, jsonifyfrom flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# ✅ This is the homepage route
-@app.route("/")
-def home():
-    return "Welcome to InteleTravel AI!"
-
-@app.route("/chat", methods=["POST"])
-def chat():
-    user_message = request.json.get("message", "")
-    response = {"response": f"You said: {user_message}"}
-    return jsonify(response)
-
-@app.route("/fetch_prices", methods=["GET"])
-def fetch_prices():
-    return jsonify({"flights": "Sample flight data", "hotels": "Sample hotel data"})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-
-
-app = Flask(__name__)
-
+# Function to handle AI responses
 def get_ai_response(user_message):
     responses = {
         "hello": "Hi! Welcome to InteleTravel AI. How can I assist you today?",
@@ -38,12 +18,14 @@ def get_ai_response(user_message):
     }
     return responses.get(user_message.lower(), "I'm here to help! Ask me about travel, bookings, commissions, or marketing.")
 
+# API Route for chatbot messages
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json.get("message", "")
     response = get_ai_response(user_message)
     return jsonify({"response": response})
 
+# API Route for fetching travel prices
 @app.route("/fetch_prices", methods=["GET"])
 def fetch_prices():
     sample_prices = {
@@ -53,5 +35,7 @@ def fetch_prices():
     }
     return jsonify(sample_prices)
 
+# Ensure the app runs on the correct host and port
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
